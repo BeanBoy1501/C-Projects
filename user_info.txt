@@ -1,4 +1,0 @@
-password:pass123
-name:jan
-surname:bockal
-age:18
