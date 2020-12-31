@@ -6,11 +6,15 @@
 #define nameSetupSize 5
 #define surnameSetupSize 8
 #define ageSetupSize 4
-#define skipToPassword 
+#define allSetupSize 26 //passSetupSize + nameSetupSize + surnameSetupSize + ageSetupSize
+
+#define skipToPassword 154 //maxSize*4 + allSetupSize
 
 FILE *fpt;
 void choiceOne();
 void choiceTwo();
+
+
 
 const char passSetup[passSetupSize] = "password:";
 const char nameSetup[nameSetupSize] = "name:";
@@ -21,6 +25,10 @@ char useless[4];
 char userInput[maxSize];
 char passForCheck[maxSize];
 char passInDatabase[maxSize];
+
+int counter = 0; //counter for Database password size
+int c; // used for fgetc(fpt)
+int skipToNextPass_counter = 0; //counts the amount of times it needs to do the sequence, depends on the amount of accounts
 
 
 
@@ -111,7 +119,7 @@ void inputPrint(char userInput[maxSize], int correctnessCheck)
 }
 
 
-int passChecking(char passInDatabase[maxSize], char passForCheck[maxSize], int counter)  
+int passCheckingIncorrect(char passInDatabase[maxSize], char passForCheck[maxSize], int counter)  
 {
     int passIncorrect = 0;
     for (int i = 0; i < counter; i++)
@@ -129,12 +137,110 @@ int passChecking(char passInDatabase[maxSize], char passForCheck[maxSize], int c
 
 void skipToNextPass()
 {
-
+    int i;
+    skipToNextPass_counter++;
+    for (i = 0; i < skipToPassword*skipToNextPass_counter; i++)
+    {
+        c = fgetc(fpt);
+    }
 }
 
 
+void displayInfo()
+{
+    int displayInfoCounter = 0;
+    int i ;
+    for (i = 0; i < maxSize - counter; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+
+    //printing the name
+
+    for (i = 0; i < nameSetupSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+    for (i = 0; i < maxSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+        if (c == '\n')
+        {
+            break;
+        }
+        else
+        {
+            printf("Your name is: %c", c);
+        }
+    }
+    printf("\n");
+    displayInfoCounter = i;
+    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+
+    //printing the surname
 
 
+    for (i = 0; i < surnameSetupSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+    for (i = 0; i < maxSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+        if (c == '\n')
+        {
+            break;
+        }
+        else
+        {
+            printf("Your surname is: %c", c);
+        }
+    }
+    printf("\n");
+    displayInfoCounter = i;
+    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+
+    //printing the age
+
+    for (i = 0; i < ageSetupSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+    for (i = 0; i < maxSize; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+        if (c == '\n')
+        {
+            break;
+        }
+        else
+        {
+            printf("Your age is: %c", c);
+        }
+    }
+    printf("\n");
+    displayInfoCounter = i;
+    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    {
+        c = fgetc(fpt);
+        printf("%c", c);
+    }
+}
 
 
 
@@ -154,23 +260,22 @@ void choiceOne()
         printf("Enter your password > ");
         fgets(passForCheck, maxSize, stdin);
 
-        int passSetupSkip = 0;
-        int c;
-        int counter = 0;
-
         rewind(fpt);
         while (1)
         {
-            //for loop for skipping the whole "password:" thing
-            if (passSetupSkip == 0)
+            //end of file
+            if (feof(fpt))
             {
-                for (int i = 0; i < passSetupSize; i++)
-                {
-                    c = fgetc(fpt);
-                }
-                passSetupSkip = 1;
+                printf("No account with this password found.");
+                break;
             }
 
+
+            //for loop for skipping the whole "password:" thing
+            for (int i = 0; i < passSetupSize; i++)
+            {
+                c = fgetc(fpt);
+            }
 
             for (int i = 0; i < maxSize; i++)
             {
@@ -185,30 +290,20 @@ void choiceOne()
                     passInDatabase[i] = c;
                 }
             }
-            if (passChecking(passInDatabase, passForCheck, counter) == 1)
+            if (passCheckingIncorrect(passInDatabase, passForCheck, counter) == 1)
             {
-                while (1)
-                {
-                    for (int i = 0; i < skipToPassword; i++)
-                    {
-                        
-                    }
-                    
-                }
-                
+                rewind(fpt);
+                skipToNextPass();
             }
-            
-
+            else
+            {
+                printf("You have entered the correct password!");
+                displayInfo();
+                break;
+            }
         }
     }
 }
-
-
-
-
-
-
-
 
 
 
@@ -259,6 +354,8 @@ void choiceTwo()
     } while (flag != 1);
     
 }
+
+
 
 
 
