@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX_SIZE 32
+#define maxSize 32
 
 #define passSetupSize 9
 #define nameSetupSize 5
@@ -8,16 +8,22 @@
 #define ageSetupSize 4
 
 FILE *fpt;
+void choiceOne();
+void choiceTwo();
 
 const char passSetup[passSetupSize] = "password:";
 const char nameSetup[nameSetupSize] = "name:";
 const char surnameSetup[surnameSetupSize] = "surname:";
 const char ageSetup[ageSetupSize] = "age:";
+char useless[4];
 
-char userInput[MAX_SIZE];
+char userInput[maxSize];
+char passForCheck[maxSize];
+char passInDatabase[maxSize];
 
 
-void setupPrint(const char setupArray[MAX_SIZE], int setupArraySize)
+
+void setupPrint(const char setupArray[maxSize], int setupArraySize)
 {
     for (int i = 0; i < setupArraySize; i++)
     {
@@ -27,13 +33,13 @@ void setupPrint(const char setupArray[MAX_SIZE], int setupArraySize)
 
 int flag = 0;
 
-void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
+void inputPrint(char userInput[maxSize], int correctnessCheck)
 {
     flag = 0;
     int invalidInput = 0;
     if (correctnessCheck == 1)
     {
-        for (int i = 0; i < MAX_SIZE; i++)
+        for (int i = 0; i < maxSize; i++)
         {
             if (userInput[i] != '\n')
             {
@@ -51,7 +57,7 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
         }
         if (invalidInput == 0)
         {
-            for (int i = 0; i < MAX_SIZE; i++)
+            for (int i = 0; i < maxSize; i++)
             {
                 fputc(userInput[i], fpt);
             }
@@ -64,7 +70,7 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
     }
     else if (correctnessCheck == 2)
     {   
-        for (int i = 0; i < MAX_SIZE; i++)
+        for (int i = 0; i < maxSize; i++)
         {
             if (userInput[i] != '\n')
             {
@@ -80,7 +86,7 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
         }
         if (invalidInput == 0)
         {
-            for (int i = 0; i < MAX_SIZE; i++)
+            for (int i = 0; i < maxSize; i++)
             {
                 fputc(userInput[i], fpt);
             }
@@ -93,7 +99,7 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
     }
     else
     {
-        for (int i = 0; i < MAX_SIZE; i++)
+        for (int i = 0; i < maxSize; i++)
         {
             fputc(userInput[i], fpt);
         }
@@ -104,7 +110,24 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
 }
 
 
+void passChecking(char passInDatabase[maxSize], char passForCheck[maxSize], int counter)  
+{
+    for (int i = 0; i < counter; i++)
+    {
+        if (passInDatabase[i] != passForCheck[i])
+        {
+            printf("they not same!");
+        }
+        
+    }
+    
+}
 
+
+void skipToNextPass()
+{
+
+}
 
 
 
@@ -116,7 +139,53 @@ void inputPrint(char userInput[MAX_SIZE], int correctnessCheck)
 
 void choiceOne()
 {
-    printf("you chose 1");
+    char *s = fgets(useless, 4, fpt);
+    if (s == NULL)
+    {
+        printf("There are no accounts registered, creating a new account now.\n");
+        choiceTwo();  
+    }
+
+    else
+    {
+        printf("Enter your password > ");
+        fgets(passForCheck, maxSize, stdin);
+
+        int passSetupSkip = 0;
+        int c;
+        int counter = 0;
+
+        rewind(fpt);
+        while (1)
+        {
+            //for loop for skipping the whole "password:" thing
+            if (passSetupSkip == 0)
+            {
+                for (int i = 0; i < passSetupSize; i++)
+                {
+                    c = fgetc(fpt);
+                }
+                passSetupSkip = 1;
+            }
+
+
+            for (int i = 0; i < maxSize; i++)
+            {
+                c = fgetc(fpt);
+                if (c == '\n')
+                {
+                    counter = i;
+                    break;
+                }
+                else
+                {
+                    passInDatabase[i] = c;
+                }
+            }
+            passChecking(passInDatabase, passForCheck, counter);
+
+        }
+    }
 }
 
 
@@ -134,42 +203,43 @@ void choiceOne()
 
 void choiceTwo()
 {
+
     //getting the user's password
-	printf("Enter the password you want to use (max 32 characters) > ");
+	printf("Enter the password you want to use for future logins (max 32 characters) > ");
+    setupPrint(passSetup, passSetupSize);
     do
     {
-        fgets(userInput, MAX_SIZE, stdin);
-        setupPrint(passSetup, passSetupSize);
+        fgets(userInput, maxSize, stdin);
         inputPrint(userInput, 0);
     } while (flag != 1);
     
 
     //getting the user's name
     printf("Enter your name (max 32 characters) > ");
+    setupPrint(nameSetup, nameSetupSize);
     do
     {
-        fgets(userInput, MAX_SIZE, stdin);
-        setupPrint(nameSetup, nameSetupSize);
+        fgets(userInput, maxSize, stdin);
         inputPrint(userInput, 1);
     } while (flag != 1);
     
 
     //getting the user's surname
     printf("Enter your surname (max 32 characters) > ");
+    setupPrint(surnameSetup, surnameSetupSize);
     do
     {
-        fgets(userInput, MAX_SIZE, stdin);
-        setupPrint(surnameSetup, surnameSetupSize);
+        fgets(userInput, maxSize, stdin);
         inputPrint(userInput, 1);
     } while (flag != 1);
 
 
     //getting the user's age
     printf("Enter your age > ");
+    setupPrint(ageSetup, ageSetupSize);
     do
     {
-        fgets(userInput, MAX_SIZE, stdin);
-        setupPrint(ageSetup, ageSetupSize);
+        fgets(userInput, maxSize, stdin);
         inputPrint(userInput, 2);
     } while (flag != 1);
     
