@@ -6,6 +6,7 @@
 #define nameSetupSize 5
 #define surnameSetupSize 8
 #define ageSetupSize 4
+#define skipToPassword 
 
 FILE *fpt;
 void choiceOne();
@@ -110,17 +111,19 @@ void inputPrint(char userInput[maxSize], int correctnessCheck)
 }
 
 
-void passChecking(char passInDatabase[maxSize], char passForCheck[maxSize], int counter)  
+int passChecking(char passInDatabase[maxSize], char passForCheck[maxSize], int counter)  
 {
+    int passIncorrect = 0;
     for (int i = 0; i < counter; i++)
     {
         if (passInDatabase[i] != passForCheck[i])
         {
-            printf("they not same!");
+            passIncorrect = 1;
+            break;
         }
         
     }
-    
+    return passIncorrect;
 }
 
 
@@ -182,7 +185,19 @@ void choiceOne()
                     passInDatabase[i] = c;
                 }
             }
-            passChecking(passInDatabase, passForCheck, counter);
+            if (passChecking(passInDatabase, passForCheck, counter) == 1)
+            {
+                while (1)
+                {
+                    for (int i = 0; i < skipToPassword; i++)
+                    {
+                        
+                    }
+                    
+                }
+                
+            }
+            
 
         }
     }
