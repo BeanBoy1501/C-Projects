@@ -150,10 +150,9 @@ void displayInfo()
 {
     int displayInfoCounter = 0;
     int i ;
-    for (i = 0; i < maxSize - counter; i++)
+    for (i = 0; i < maxSize - counter - 1; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
 
     //printing the name
@@ -161,27 +160,25 @@ void displayInfo()
     for (i = 0; i < nameSetupSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
+    printf("Your name is > ");
     for (i = 0; i < maxSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
         if (c == '\n')
         {
             break;
         }
         else
         {
-            printf("Your name is: %c", c);
+            printf("%c", c);
         }
     }
     printf("\n");
     displayInfoCounter = i;
-    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    for (i = 0; i < maxSize - displayInfoCounter - 1; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
 
     //printing the surname
@@ -190,27 +187,25 @@ void displayInfo()
     for (i = 0; i < surnameSetupSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
+    printf("Your surname is > ");
     for (i = 0; i < maxSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
         if (c == '\n')
         {
             break;
         }
         else
         {
-            printf("Your surname is: %c", c);
+            printf("%c", c);
         }
     }
     printf("\n");
     displayInfoCounter = i;
-    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    for (i = 0; i < maxSize - displayInfoCounter - 1; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
 
     //printing the age
@@ -218,27 +213,25 @@ void displayInfo()
     for (i = 0; i < ageSetupSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
+    printf("Your age is > ");
     for (i = 0; i < maxSize; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
         if (c == '\n')
         {
             break;
         }
         else
         {
-            printf("Your age is: %c", c);
+            printf("%c", c);
         }
     }
     printf("\n");
     displayInfoCounter = i;
-    for (i = 0; i < maxSize - displayInfoCounter; i++)
+    for (i = 0; i < maxSize - displayInfoCounter - 1; i++)
     {
         c = fgetc(fpt);
-        printf("%c", c);
     }
 }
 
@@ -297,7 +290,7 @@ void choiceOne()
             }
             else
             {
-                printf("You have entered the correct password!");
+                printf("You have entered the correct password, printing out your info now!\n");
                 displayInfo();
                 break;
             }
@@ -360,12 +353,6 @@ void choiceTwo()
 
 
 
-
-
-
-
-
-
 int main()
 {
     fpt = fopen("database.txt", "a+");
@@ -399,5 +386,5 @@ int main()
 
     fclose(fpt);
 
-    return 0;
+        return 0;
 }
